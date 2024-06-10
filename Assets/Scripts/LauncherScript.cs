@@ -1,45 +1,56 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class LauncherScript : MonoBehaviour {
     [SerializeField] SimulatedScene _simulatedScene;    
     
     [SerializeField] AirmailPackage _projectile;
-    [SerializeField] float _force;
 
     [SerializeField] Transform _originPoint;
-    [SerializeField] private float _pitchSpeed = 5f;
-    [SerializeField] private float _yawSpeed = 5f;
-    [SerializeField] private float _forceSpeed = 5f;
+
+    [SerializeField] Transform _barrel;
+
+    [SerializeField] float _force;
+
+    private void Start()
+    {
+        if (!_barrel)
+        {
+            _barrel = transform.Find("Barrel");
+
+            Assert.IsNotNull( _barrel);
+        }
+    }
 
     private void FixedUpdate()
     {
         _simulatedScene.SimulatedTrajectory(_projectile, _originPoint.position, _force * _originPoint.forward);
     }
 
-    void Update()
+    public void RotateTurret(float pitch, float yaw)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AirmailPackage projectile = Instantiate(_projectile, _originPoint.position, Quaternion.identity);
+        Debug.Log($"Rotate by {pitch}, {yaw}");
+        transform.Rotate(Vector3.up * yaw);
+        _barrel.Rotate(Vector3.right * pitch);
+    }
 
-            projectile.ApplyImpulse(_force * _originPoint.forward);
-        }
+    internal void Fire()
+    {
+        AirmailPackage projectile = Instantiate(_projectile, _originPoint.position, Quaternion.identity);
 
-        float pitchAmount = Input.GetAxis("Vertical") * Time.deltaTime * _pitchSpeed;
-        float yawAmount = Input.GetAxis("Horizontal") * Time.deltaTime * _yawSpeed;
+        projectile.ApplyImpulse(_force * _originPoint.forward);
+    }
 
-        transform.Rotate(0, yawAmount, pitchAmount);
+    internal void AddForce(float force)
+    {
+        _force += force;
+    }
 
-        if (Input.GetKey(KeyCode.R))
-        {
-            _force += _forceSpeed * Time.deltaTime;
-        }
-
-        if (Input.GetKey(KeyCode.F))
-        {
-            _force -= _forceSpeed * Time.deltaTime;
-        }
+    internal void SimulateTrajectory()
+    {
+        _simulatedScene.SimulatedTrajectory(_projectile, _originPoint.position, _force * _originPoint.forward);
     }
 }

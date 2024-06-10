@@ -1,18 +1,23 @@
 using System.Collections;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class Explodable : MonoBehaviour
 {
     private bool _exploding = false;
+    private bool _effectPlayed = false;
+
     [SerializeField] private float _explosionDelay = 0.1f;
     [SerializeField] private float _explosionRadius = 2f;
     [SerializeField] private float _explosionForce = 500f;
     [SerializeField] private float _upwardModifier = 2f;
+    [SerializeField] GameObject _explosionEffect;
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Projectile"))
         {
+            Destroy(collision.gameObject);
             TriggerExplosion();
         }
     }
@@ -31,6 +36,10 @@ public class Explodable : MonoBehaviour
         yield return new WaitForSeconds(_explosionDelay);
 
         // Explosion particle effect
+        if (_explosionEffect && !_effectPlayed) { 
+            Instantiate(_explosionEffect);
+            _effectPlayed = true;
+        }
 
         // Apply explosion force to everything in the explosion radius
         Collider[] affectedObjects = Physics.OverlapSphere(transform.position, _explosionRadius);

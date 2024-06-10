@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,9 +20,15 @@ public class AirmailPackage : MonoBehaviour
 
     public void ApplyImpulse(Vector3 force)
     {
+        // Debug.Log($"Adding force of {force}");
         if (_rb != null)
         {
             _rb.AddForce(force, ForceMode.Impulse);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        // Debug.Log($"Velocity {_rb.velocity}");
     }
 }

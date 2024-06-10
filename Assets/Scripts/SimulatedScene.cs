@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using TMPro;
 using UnityEngine;
@@ -11,9 +12,18 @@ public class SimulatedScene : MonoBehaviour
     // A reference to a collection that holds the items we plan to simulate
     [SerializeField] private Transform _targetParent;
 
-    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (_targetParent == null)
+        {
+            _targetParent = transform.root;
+        }
+    }
+
     void Start()
     {
+        Debug.Log("FixedDeltaTime: " + Time.fixedDeltaTime);
         CreateSimulatedPhysicsScene();
 
         Physics.simulationMode = SimulationMode.FixedUpdate;
@@ -27,24 +37,28 @@ public class SimulatedScene : MonoBehaviour
         UpdateObstacles();
     }
 
-    private void UpdateObstacles()
+    public void UpdateObstacles()
     {
         GameObject[] objectsInPhysicsScene = _simulatedScene.GetRootGameObjects();
         foreach (GameObject myObj in objectsInPhysicsScene)
         {
-            Debug.Log($"Destroying {myObj.name}");
+            // Debug.Log($"Destroying {myObj.name}");
             Destroy(myObj);
         }
         foreach (Transform obstacle in _targetParent)
         {
-            Debug.Log($"Considering {obstacle.name} with tag {obstacle.tag}");
+            // Debug.Log($"Considering {obstacle.name} with tag {obstacle.tag}");
             if (obstacle.CompareTag("Obstacle"))
             {
                 GameObject simulatedObject = Instantiate(obstacle.gameObject, obstacle.position, obstacle.rotation);
-                Renderer renderer = simulatedObject.GetComponent<Renderer>();
-                if (renderer != null)
-                {
+                if (simulatedObject.TryGetComponent<Renderer>(out Renderer renderer))
+                { 
                     renderer.enabled = false;
+                }
+
+                if (simulatedObject.TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+                {
+                    rigidbody.isKinematic = true;
                 }
 
                 SceneManager.MoveGameObjectToScene(simulatedObject, _simulatedScene);
@@ -57,7 +71,7 @@ public class SimulatedScene : MonoBehaviour
 
     public void SimulatedTrajectory(AirmailPackage package, Vector3 pos, Vector3 velocity)
     {
-        UpdateObstacles();
+        // UpdateObstacles();
 
         AirmailPackage instance = Instantiate(package, pos, Quaternion.identity);
         
