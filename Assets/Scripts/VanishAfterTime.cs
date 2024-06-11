@@ -13,6 +13,7 @@ public class VanishAfterTime : MonoBehaviour
     IEnumerator DestroyAfterDelay()
     {
         yield return new WaitForSeconds(_delayTime);
+        Debug.Log(GameManager.Instance);
         GameManager.Instance.RegisterBulletDeath();
         Destroy(this.gameObject);
     }
