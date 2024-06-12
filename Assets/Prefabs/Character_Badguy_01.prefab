@@ -1196,13 +1196,15 @@ GameObject:
   m_Component:
   - component: {fileID: 8087941523594327127}
   - component: {fileID: 3875803898612701233}
+  - component: {fileID: 8351052352816381248}
+  - component: {fileID: 2357006655992203797}
   m_Layer: 0
   m_Name: Character_Badguy_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8087941523594327127
 Transform:
   m_ObjectHideFlags: 0
@@ -1241,6 +1243,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8351052352816381248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6509181980022205624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea4f3ac2355658c4f8e591bc984956f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &2357006655992203797
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6509181980022205624}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2.4236667
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.71183586, z: 0}
 --- !u!1 &6654415923701995536
 GameObject:
   m_ObjectHideFlags: 0
