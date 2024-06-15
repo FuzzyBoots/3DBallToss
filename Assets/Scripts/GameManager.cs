@@ -19,6 +19,7 @@ class GameManager : MonoBehaviour
     [SerializeField] private float _pitchSpeed = 5f;
     [SerializeField] private float _yawSpeed = 5f;
     [SerializeField] private float _forceSpeed = 5f;
+    [SerializeField] private int _score;
 
     public static GameManager Instance
     {
@@ -87,13 +88,13 @@ class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartFiring();
+            StartShooting();
         } else {
             _launcher.SimulateTrajectory();
         }
     }
 
-    private void StartFiring()
+    private void StartShooting()
     {
         _launcher.Fire();
         _gameState = gameState.SHOOTING;
@@ -117,5 +118,12 @@ class GameManager : MonoBehaviour
     private void StartAiming()
     {
         _gameState = gameState.AIMING;
+    }
+
+    public void AddScore(int score)
+    {
+        _score += score;
+
+        // Update UI?
     }
 }

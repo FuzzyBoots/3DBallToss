@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class Explodable : MonoBehaviour
+public class Explodable : MonoBehaviour, IDamageable
 {
     private bool _exploding = false;
     private bool _effectPlayed = false;
@@ -12,15 +12,6 @@ public class Explodable : MonoBehaviour
     [SerializeField] private float _explosionForce = 500f;
     [SerializeField] private float _upwardModifier = 2f;
     [SerializeField] GameObject _explosionEffect;
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Projectile"))
-        {
-            Destroy(collision.gameObject);
-            TriggerExplosion();
-        }
-    }
 
     public void TriggerExplosion()
     {
@@ -37,7 +28,7 @@ public class Explodable : MonoBehaviour
 
         // Explosion particle effect
         if (_explosionEffect && !_effectPlayed) { 
-            Instantiate(_explosionEffect);
+            Instantiate(_explosionEffect, transform.position, Quaternion.identity);
             _effectPlayed = true;
         }
 
@@ -45,9 +36,9 @@ public class Explodable : MonoBehaviour
         Collider[] affectedObjects = Physics.OverlapSphere(transform.position, _explosionRadius);
         foreach (Collider collider in affectedObjects)
         {
-            if (collider.TryGetComponent<Explodable>(out Explodable exploder))
+            if (collider.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                exploder.TriggerExplosion();
+                damageable.ApplyDamage();
             }
 
             if (collider.TryGetComponent<Rigidbody>(out Rigidbody rb))
@@ -57,5 +48,10 @@ public class Explodable : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    public void ApplyDamage()
+    {
+        TriggerExplosion();
     }
 }

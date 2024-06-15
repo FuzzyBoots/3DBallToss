@@ -1,4 +1,5 @@
 interface IDamageable
 {
-    public void ApplyDamage(int damage);
+    // Handles applying damage, whatever the source
+    public void ApplyDamage();
 }

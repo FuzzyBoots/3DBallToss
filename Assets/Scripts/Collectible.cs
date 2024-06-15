@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    [SerializeField] private int _collectibleValue = 2;
+    [SerializeField] private float _spinSpeed = 45f;
+
+    public void Collect()
     {
-        if (other.gameObject.CompareTag("Projectile")) {
-            Destroy(this.gameObject);
-        }
+        GameManager.Instance.AddScore(_collectibleValue);
+        Destroy(this.gameObject);
+    }
+
+    private void Update()
+    {
+        transform.Rotate(Vector3.up * Time.deltaTime * _spinSpeed);
     }
 }

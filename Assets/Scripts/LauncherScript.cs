@@ -13,7 +13,7 @@ public class LauncherScript : MonoBehaviour {
 
     [SerializeField] Transform _barrel;
 
-    [SerializeField] float _force;
+    [SerializeField] float _force = 40f;
 
     private void Start()
     {
@@ -32,9 +32,8 @@ public class LauncherScript : MonoBehaviour {
 
     public void RotateTurret(float pitch, float yaw)
     {
-        Debug.Log($"Rotate by {pitch}, {yaw}");
         transform.Rotate(Vector3.up * yaw);
-        _barrel.Rotate(Vector3.right * pitch);
+        _barrel.Rotate(Vector3.forward * pitch);
     }
 
     internal void Fire()
@@ -47,6 +46,8 @@ public class LauncherScript : MonoBehaviour {
     internal void AddForce(float force)
     {
         _force += force;
+        _force = Mathf.Clamp(_force, 1f, 400f);
+        Debug.Log($"Force: {_force} after adding {force}");
     }
 
     internal void SimulateTrajectory()

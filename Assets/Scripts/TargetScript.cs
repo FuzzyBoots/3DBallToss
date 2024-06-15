@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TargetScript : MonoBehaviour
+public class TargetScript : MonoBehaviour, IDamageable
 {
-    private void OnCollisionEnter(Collision collision)
+    [SerializeField] private int _targetValue = 5;
+
+    public void ApplyDamage()
     {
-        if (collision.gameObject.CompareTag("Projectile"))
-        {
-            gameObject.SetActive(false);
-        }
+        GameManager.Instance.AddScore(_targetValue);
+        gameObject.SetActive(false);
     }
 }

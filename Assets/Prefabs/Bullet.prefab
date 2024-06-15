@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -4642860127199029597}
   - component: {fileID: -1008659011372562984}
   - component: {fileID: 1724649749861896451}
+  - component: {fileID: 1560274617157430370}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Projectile
@@ -175,3 +176,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _destroyDistance: 25
+--- !u!114 &1560274617157430370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7936312789132217894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd33f5ab257a61d4fb27e8c5af2b6fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
