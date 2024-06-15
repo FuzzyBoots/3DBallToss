@@ -36,11 +36,13 @@ public class LauncherScript : MonoBehaviour {
         _barrel.Rotate(Vector3.forward * pitch);
     }
 
-    internal void Fire()
+    internal GameObject Fire()
     {
         AirmailPackage projectile = Instantiate(_projectile, _originPoint.position, Quaternion.identity);
 
         projectile.ApplyImpulse(_force * _originPoint.forward);
+
+        return projectile.gameObject;
     }
 
     internal void AddForce(float force)

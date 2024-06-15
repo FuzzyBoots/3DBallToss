@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2587725013936705547}
   m_Layer: 0
   m_Name: SM_Env_Cactus_05
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 
 class GameManager : MonoBehaviour
 {
@@ -8,7 +9,7 @@ class GameManager : MonoBehaviour
     {
         AIMING,
         SHOOTING,
-        EVALUATING
+        GAME_OVER
     }
 
     [SerializeField] gameState _gameState = gameState.AIMING;
@@ -20,6 +21,8 @@ class GameManager : MonoBehaviour
     [SerializeField] private float _yawSpeed = 5f;
     [SerializeField] private float _forceSpeed = 5f;
     [SerializeField] private int _score;
+    
+    [SerializeField] private GameObject _enemyContainer;
 
     public static GameManager Instance
     {
@@ -38,7 +41,11 @@ class GameManager : MonoBehaviour
             Destroy(this);
         }
 
-        Assert.IsNotNull(_simulatedScene);
+        Assert.IsNotNull(_simulatedScene, "Simulated Scene not set");
+        Assert.IsNotNull(_launcher, "Launcher not set");
+        Assert.IsNotNull(_enemyContainer, "Enemy Container not set");
+
+        CheckWinCondition();
     }
 
     private void Update()
@@ -51,15 +58,14 @@ class GameManager : MonoBehaviour
             case gameState.SHOOTING:
                 PerformShooting();
                 break;
-            case gameState.EVALUATING:
-                PerformEvaluating();
-                break;
         }
-    }
 
-    private void PerformEvaluating()
-    {
-        // ??
+        if (Input.GetKey(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        CheckWinCondition();
     }
 
     private void PerformShooting()
@@ -76,12 +82,12 @@ class GameManager : MonoBehaviour
 
         _launcher.RotateTurret(pitchAmount, yawAmount);
 
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKey(KeyCode.F))
         {
             _launcher.AddForce(_forceSpeed * Time.deltaTime * multiplier);
         }
 
-        if (Input.GetKey(KeyCode.F))
+        if (Input.GetKey(KeyCode.G))
         {
             _launcher.AddForce(-_forceSpeed * Time.deltaTime * multiplier);
         }
@@ -97,22 +103,28 @@ class GameManager : MonoBehaviour
     private void StartShooting()
     {
         _launcher.Fire();
+        AddScore(-1);
         _gameState = gameState.SHOOTING;
     }
 
     // Helper function for bullets going out of scope. Initially, we'll assume one.
     public void RegisterBulletDeath()
     {
-        StartEvaluating();
+        if (_gameState != gameState.GAME_OVER)
+        {
+            StartAiming();
+        }
     }
 
-    private void StartEvaluating()
+    public void CheckWinCondition()
     {
-        _gameState = gameState.EVALUATING;
-        // If all of our targets are gone, total up the score
-
-        // Otherwwise:
-        StartAiming();
+        int activeChildCount = _enemyContainer.transform.childCount;
+        UIManager.Instance.SetLeft(activeChildCount);
+        if (activeChildCount == 0)
+        {
+            UIManager.Instance.DisplayWinText();
+            _gameState = gameState.GAME_OVER;
+        }
     }
 
     private void StartAiming()
@@ -124,6 +136,6 @@ class GameManager : MonoBehaviour
     {
         _score += score;
 
-        // Update UI?
+        UIManager.Instance.SetScore(_score);
     }
 }
